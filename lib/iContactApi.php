@@ -96,7 +96,7 @@ class iContactApi {
 	 * @param string [$sPhone]
 	 * @param string [$sFax]
 	 * @param string [$sBusiness]
-	 
+	 *
 	 * @return object
 	**/
 	public function addContact($sEmail, $sStatus = null, $sPrefix = null, $sFirstName = null, $sLastName = null, $sSuffix = null, $sStreet = null, $sStreet2 = null, $sCity = null, $sState = null, $sPostalCode = null, $sPhone = null, $sFax = null, $sBusiness = null) {
