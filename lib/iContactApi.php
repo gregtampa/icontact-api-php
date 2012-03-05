@@ -500,7 +500,7 @@ class iContactApi {
 			)
 		), 'sends');
 		// Return the send
-		return $aSends[0];
+		return $aSends;
 	}
 
 	/**
@@ -523,7 +523,7 @@ class iContactApi {
 			)
 		), 'subscriptions');
 		// Return the subscription
-		return $aSubscriptions[0];
+		return $aSubscriptions;
 	}
 
 	/**
@@ -641,11 +641,6 @@ class iContactApi {
 	 * @return string|bool
 	**/
 	public function uploadData($sFile, $iListId = null, $iUploadId = null) {
-		// Make sure the file exists
-		if (!file_exists($sFile)) {
-			// Return failure
-			return false;
-		}
 		// Check for an upload ID
 		if (empty($iUploadId)) {
 			// Make the call
@@ -757,6 +752,17 @@ class iContactApi {
 	//////////////////////////////////////////////////////////////////////////////
 	/// Getters /////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * This method grabs the campaigns associated
+	 * your iContact account
+	 * @access public
+	 * @return object
+	**/
+	public function getCampaigns() {
+		// Make the call and return the data
+		return $this->makeCall("/a/{$this->setAccountId()}/c/{$this->setClientFolderId()}/campaigns", 'GET');
+	}
 
 	/**
 	 * This method grabs a single contact
