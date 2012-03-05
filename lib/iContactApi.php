@@ -508,10 +508,10 @@ class iContactApi {
 	 * @access public
 	 * @param integer $iContactId
 	 * @param integer $iListId
-	 * @param string $sStatus
+	 * @param string  $sStatus
 	 * @return object
-	**/
-	public function subscribeContactToList($iContactId, $iListId, $sStatus) {
+	 **/
+	public function subscribeContactToList($iContactId, $iListId, $sStatus = 'normal') {
 		// Valid statuses
 		$aValidStatuses = array('normal', 'pending', 'unsubscribed');
 		// Setup the subscription and make the call
@@ -529,23 +529,23 @@ class iContactApi {
 	/**
 	 * This method updates a contact in your iContact account
 	 * @access public
-	 * @param integer [$iContactId]
-	 * @param string [$sEmail]
-	 * @param string [$sPrefix]
-	 * @param string [$sFirstName]
-	 * @param string [$sLastName]
-	 * @param string [$sSuffix]
-	 * @param string [$sStreet]
-	 * @param string [$sStreet2]
-	 * @param string [$sCity]
-	 * @param string [$sState]
-	 * @param string [$sPostalCode]
-	 * @param string [$sPhone]
-	 * @param string [$sFax]
-	 * @param string [$sBusiness]
-	 * @param string [$sStatus]
+	 * @param integer $iContactId
+	 * @param string  $sEmail
+	 * @param string  $sPrefix
+	 * @param string  $sFirstName
+	 * @param string  $sLastName
+	 * @param string  $sSuffix
+	 * @param string  $sStreet
+	 * @param string  $sStreet2
+	 * @param string  $sCity
+	 * @param string  $sState
+	 * @param string  $sPostalCode
+	 * @param string  $sPhone
+	 * @param string  $sFax
+	 * @param string  $sBusiness
+	 * @param string  $sStatus
 	 * @return bool|object
-	**/
+	 **/
 	public function updateContact($iContactId, $sEmail = null, $sPrefix = null, $sFirstName = null, $sLastName = null, $sSuffix = null, $sStreet = null, $sStreet2 = null, $sCity = null, $sState = null, $sPostalCode = null, $sPhone = null, $sFax = null, $sBusiness = null, $sStatus = null) {
 		// Valid statuses
 		$aValidStatuses = array('normal', 'bounced', 'donotcontact', 'pending', 'invitable', 'deleted');

@@ -38,10 +38,8 @@ try {
 	// Upload data by sending a filename (execute a PUT based on file contents)
 	var_dump($oiContact->uploadData('/path/to/file.csv', 179962));
 	// Upload data by sending a string of file contents
-	$rFile     = fopen('/path/to/file.csv', 'r');              // Open the file for reading
-	$sFileData = fread($rFile, filesize('/path/to/file.csv')); // Read the file
-	fclose($rFile);                                            // Close the file
-	var_dump($oiContact->uploadData($sFileData, 179962));      // Send the data to the API (execute a PUT with raw data)
+	$sFileData = file_get_contents('/path/to/file.csv');  // Read the file
+	var_dump($oiContact->uploadData($sFileData, 179962)); // Send the data to the API
 } catch (Exception $oException) { // Catch any exceptions
 	// Dump errors
 	var_dump($oiContact->getErrors());
