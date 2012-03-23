@@ -1,50 +1,148 @@
 <?php
-ini_set('display_errors', true);
-ini_set('error_reporting', E_ALL);
 
-// Load the iContact library
-require_once('lib/iContactApi.php');
+require_once ('config.php');
 
-// Give the API your information
-iContactApi::getInstance()->setConfig(array(
-	'appId'       => '', 
-	'apiPassword' => '', 
-	'apiUsername' => ''
-));
+require_once ('util.php');
 
-// Store the singleton
-$oiContact = iContactApi::getInstance();
-// Try to make the call(s)
-try {
-	//  are examples on how to call the  iContact PHP API class
-	// Grab all contacts
-	var_dump($oiContact->getContacts());
-	// Grab a contact
-	var_dump($oiContact->getContact(42094396));
-	// Create a contact
-	var_dump($oiContact->addContact('joe@shmoe.com', null, null, 'Joe', 'Shmoe', null, '123 Somewhere Ln', 'Apt 12', 'Somewhere', 'NW', '12345', '123-456-7890', '123-456-7890', null));
-	// Get messages
-	var_dump($oiContact->getMessages());
-	// Create a list
-	var_dump($oiContact->addList('somelist', 1698, true, false, false, 'Just an example list', 'Some List'));
-	// Subscribe contact to list
-	var_dump($oiContact->subscribeContactToList(42094396, 179962, 'normal'));
-	// Grab all campaigns
-	var_dump($oiContact->getCampaigns());
-	// Create message
-	var_dump($oiContact->addMessage('An Example Message', 585, '<h1>An Example Message</h1>', 'An Example Message', 'ExampleMessage', 33765, 'normal'));
-	// Schedule send
-	var_dump($oiContact->sendMessage(array(33765), 179962, null, null, null, mktime(12, 0, 0, 1, 1, 2012)));
-	// Upload data by sending a filename (execute a PUT based on file contents)
-	var_dump($oiContact->uploadData('/path/to/file.csv', 179962));
-	// Upload data by sending a string of file contents
-	$sFileData = file_get_contents('/path/to/file.csv');  // Read the file
-	var_dump($oiContact->uploadData($sFileData, 179962)); // Send the data to the API
-} catch (Exception $oException) { // Catch any exceptions
-	// Dump errors
-	var_dump($oiContact->getErrors());
-	// Grab the last raw request data
-	var_dump($oiContact->getLastRequest());
-	// Grab the last raw response data
-	var_dump($oiContact->getLastResponse());
+
+/***********************************/
+
+/** set your account details here **/
+
+/***********************************/
+
+$accountId = $account_id;
+
+$clientFolderId = $client_folder_id;
+
+//$welcomeMessageId="10397";
+
+// add new contact
+
+function addContact($accountId,$clientFolderId,$firstname,$lastname,$email,$password)
+
+{
+
+	$contactId = null;
+	
+	$response = callResource("/a/{$accountId}/c/{$clientFolderId}/contacts",
+	
+		'POST', array(
+		
+		array(
+		
+		'firstName' => $firstname,
+		
+		'lastName' => $lastname,
+		
+		'email' => $email,
+		
+		'cg_username' => $email,
+		
+		'cg_password' => $password
+		
+		)
+	
+	));
+	
+	
+	if ($response['code'] == STATUS_CODE_SUCCESS) {
+	
+		$contactId = $response['data']['contacts'][0]['contactId'];
+		
+		$warningCount = 0;
+		
+		if (!empty($response['data']['warnings'])) {
+		
+		$warningCount = count($response['data']['warnings']);
+		
+		}
+		
+		} else {
+	
+		}
+	
+	return $contactId;
+
 }
+
+// add contact to spicifice list
+
+function subscribeContactToList($contactId, $listId,$accountId,$clientFolderId,$welcomeMessageId)
+
+{
+
+	$response = callResource("/a/{$accountId}/c/{$clientFolderId}/subscriptions",
+	
+	'POST', array(
+	
+	array(
+	
+	'contactId' => $contactId,
+	
+	'listId' => $listId,
+	
+	'status' => 'normal',
+	
+	),
+	
+	));
+	
+	if ($response['code'] == STATUS_CODE_SUCCESS) {
+	
+		$warningCount = 0;
+		
+		if (!empty($response['data']['warnings'])) {
+		
+		$warningCount = count($response['data']['warnings']);
+		
+		}
+	
+//echo "<script> alert('Congratulation You are Successfully Add to Online Gun Permit Subscription');</script>";
+
+//echo "<p>Subscribed contact {$contactId} to list {$listId}, with {$warningCount} warnings.</p>\n";
+
+//dump($response['data']);
+
+
+} else {
+
+echo "<script> alert('Sorry Some Problem occur Try again Later');</script>";
+
+}
+
+}
+
+function moveContactToList($contactId, $listId, $newlistId, $accountId, $clientFolderId)
+
+{
+	$subscriptionId = $listId."_".$contactId;
+	
+	$array = callResource("/a/{$accountId}/c/{$clientFolderId}/subscriptions/{subscriptionId}",
+	
+	'PUT', array(		
+		'listId' => $listId,
+		'status' => 'normal',		
+		));
+	$response = implode(",", $array);
+	//var_dump($array);die;
+
+	if ($response['code'] == STATUS_CODE_SUCCESS) {
+	
+		$warningCount = 0;
+		
+		if (!empty($response['data']['warnings'])) {
+		
+		$warningCount = count($response['data']['warnings']);
+		
+		}
+	
+
+} else {
+
+echo "<script> alert('Sorry Some Problem occur Try again Later');</script>";
+
+}
+
+}
+?>
