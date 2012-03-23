@@ -17,7 +17,7 @@ $GLOBALS['config'] = array(
 $headers = array(
 		"Accept: text/xml",
 		"Content-Type: text/xml",
-		'Api-Version: 2.0',
+		'Api-Version: 2.2',
 		'Api-AppId: ' . $GLOBALS['config']['appId'],
 		'Api-Username: ' . $GLOBALS['config']['username'],
 		'Api-Password: ' . $GLOBALS['config']['password']);
