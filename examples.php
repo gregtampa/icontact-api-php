@@ -116,9 +116,11 @@ function callResource($url, $method, $data = null)
 		 case 'PUT':
 	 		if (!is_string($data) || !file_exists($data)) {
 				// Not a file, so we assume this is just data
+				//echo 'test1'; die();
 				curl_setopt($handle, CURLOPT_CUSTOMREQUEST, "PUT");
 				curl_setopt($handle, CURLOPT_POSTFIELDS, $data);
 			} else {
+			//echo 'test2'; die();
 				$rFileContentHandle = fopen($data, 'r');
 				if ($rFileContentHandle === false) {
 					$this->addError('A non-existant file was specified for POST data, or the file could not be opened.');
@@ -128,12 +130,17 @@ function callResource($url, $method, $data = null)
 					curl_setopt($handle, CURLOPT_INFILE, $rFileContentHandle);
 				}
 			}
-		     // curl_setopt($handle, CURLOPT_PUT, true);
-		      //$data2 = implode(",", $data);
-		     // $file_handle = @fopen($data, 'r');
-		     // curl_setopt($handle, CURLOPT_INFILE, $file_handle);
+			//echo $data; die();
+		      curl_setopt($handle, CURLOPT_PUT, true);
+		      $data2 = implode(",", $data);
+		      //var_dump($data); die();
+		      //echo $data2; die();
+		      $file_handle = @fopen($data2, 'r');
+		      //echo $file_handle; die();
+		      //curl_setopt($handle, CURLOPT_INFILE, $file_handle);
 	
 			break;
+		
 		
 		case 'DELETE':
 		
@@ -281,9 +288,11 @@ function moveContactToList($contactId, $listId, $newlistId, $accountId, $clientF
 	$array = callResource("/a/{$accountId}/c/{$clientFolderId}/subscriptions/{subscriptionId}",
 	
 	'PUT', array(		
+		'contactId' => $contactId,
 		'listId' => $listId,
 		'status' => 'normal',		
 		));
+		
 	$response = implode(",", $array);
 	//var_dump($array);die;
 
@@ -310,4 +319,25 @@ echo "<script> alert('Sorry Some Problem occur Try again Later');</script>";
 //of course assign all the varibles first $foo = 'bar';
 //$contactId = addContact($accountId, $clientFolderId, $firstname, $lastname, $email, $password);
 //subscribeContactToList($contactId, $listId,$accountId,$clientFolderId,$welcomeMessageId);
+/*
+//testing move
+	//$name = "movetest";
+	//$email = "asd2@example.com";
+
+	include("icontact.php");
+	// get the contact id
+	//hard coding the contact id for testing purposes
+	$contactId = '11767433';
+	// add the contact to list
+	// u need to get the spicific list id to insert that contact
+	$listId = 19745;
+	//$welcomeMessageId="28628";
+	//subscribeContactToList($contactId, $listId,$accountId,$clientFolderId,$welcomeMessageId);
+	//the new list to move the contact to
+	$newlistId = 19966;
+	moveContactToList($contactId, $listId, $newlistId, $accountId, $clientFolderId);
+	echo 'done';
+*/
+
+
 ?>
